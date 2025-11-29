@@ -1,0 +1,33 @@
+{
+  "name": "scmtp-notification-service",
+  "version": "1.0.0",
+  "description": "Notification service for SC MTP platform. Consumes domain events from Kafka and sends email/SMS/push notifications.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "lint": "echo \"No linter configured\""
+  },
+  "keywords": [
+    "notification",
+    "kafka",
+    "microservices",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.1",
+    "kafkajs": "^2.2.4",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.3"
+  }
+}
+
+
