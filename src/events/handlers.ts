@@ -64,20 +64,36 @@ async function handleUserEvent(event: UserEvent): Promise<void> {
 }
 
 async function handleTicketEvent(event: TicketEvent): Promise<void> {
-  if (event.type === "TicketBooked") {
+  if (event.type === "TICKET_BOOKED") {
     const notification = buildNotification(
       event.payload.userId,
       "PUSH",
       "Ticket booked",
-      `Your ticket ${event.payload.ticketId} has been booked for route ${event.payload.routeId}.`
+      `Your ticket ${event.payload.bookingId} has been booked for route ${event.payload.routeId}.`
     );
     await dispatchNotification(notification);
-  } else if (event.type === "TicketCancelled") {
+  } else if (event.type === "TICKET_RESERVED") {
+    const notification = buildNotification(
+      event.payload.userId,
+      "PUSH",
+      "Ticket reserved",
+      `Your ticket ${event.payload.bookingId} has been reserved. Please complete payment within 15 minutes.`
+    );
+    await dispatchNotification(notification);
+  } else if (event.type === "TICKET_CONFIRMED") {
+    const notification = buildNotification(
+      event.payload.userId,
+      "EMAIL",
+      "Ticket confirmed",
+      `Your ticket ${event.payload.bookingId} has been confirmed. Payment ID: ${event.payload.paymentId}`
+    );
+    await dispatchNotification(notification);
+  } else if (event.type === "TICKET_CANCELLED") {
     const notification = buildNotification(
       event.payload.userId,
       "PUSH",
       "Ticket cancelled",
-      `Your ticket ${event.payload.ticketId} has been cancelled. ${event.payload.reason || ""}`
+      `Your ticket ${event.payload.bookingId} has been cancelled. ${event.payload.reason || ""}`
     );
     await dispatchNotification(notification);
   }

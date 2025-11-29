@@ -1,7 +1,7 @@
 // Event envelopes coming from other services via Kafka.
 
 export type UserEventType = "UserRegistered";
-export type TicketEventType = "TicketBooked" | "TicketCancelled";
+export type TicketEventType = "TICKET_BOOKED" | "TICKET_RESERVED" | "TICKET_CONFIRMED" | "TICKET_CANCELLED";
 export type PaymentEventType = "PaymentCompleted" | "PaymentFailed";
 export type WalletEventType = "WalletTopupCompleted" | "WalletDebited" | "WalletCredited";
 
@@ -21,24 +21,52 @@ export interface UserRegisteredPayload {
 
 export type UserEvent = BaseEvent<UserEventType, UserRegisteredPayload>;
 
-// Ticketing events
+// Ticketing events - matching ticketing service event types
 export interface TicketBookedPayload {
-  ticketId: string;
+  bookingId: string;
   userId: string;
   routeId: string;
   scheduleId: string;
+  seatNumber?: string | null;
+  passengerName: string;
+  passengerEmail: string;
   price: number;
+  currency: string;
+}
+
+export interface TicketReservedPayload {
+  bookingId: string;
+  userId: string;
+  routeId: string;
+  scheduleId: string;
+  seatNumber?: string | null;
+  passengerName: string;
+  passengerEmail: string;
+  price: number;
+  currency: string;
+  expiresAt: string;
+}
+
+export interface TicketConfirmedPayload {
+  bookingId: string;
+  userId: string;
+  paymentId: string;
+  confirmedAt: string;
 }
 
 export interface TicketCancelledPayload {
-  ticketId: string;
+  bookingId: string;
   userId: string;
   reason?: string;
+  cancelledAt: string;
+  refundAmount?: number;
 }
 
 export type TicketEvent =
-  | BaseEvent<"TicketBooked", TicketBookedPayload>
-  | BaseEvent<"TicketCancelled", TicketCancelledPayload>;
+  | BaseEvent<"TICKET_BOOKED", TicketBookedPayload>
+  | BaseEvent<"TICKET_RESERVED", TicketReservedPayload>
+  | BaseEvent<"TICKET_CONFIRMED", TicketConfirmedPayload>
+  | BaseEvent<"TICKET_CANCELLED", TicketCancelledPayload>;
 
 // Payment events
 export interface PaymentCompletedPayload {
