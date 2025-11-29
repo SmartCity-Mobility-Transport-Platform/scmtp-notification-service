@@ -1,0 +1,1 @@
+# scmtp-notification-service
